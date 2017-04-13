@@ -21,7 +21,7 @@ Ansible script to deploy drupal site using Aegir
 # cd ansible_deploy
 # git clone https://github.com/obiba/obiba-ansible-deployment-aegir.git
 ```
-- create an Playbook file deploy.yaml
+- create an Playbook file deploy.yaml in the 'ansible_deploy' folder
 ```bash
 ---
 - hosts: local
