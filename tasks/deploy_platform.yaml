@@ -1,0 +1,26 @@
+- name: Check if platform already exist
+  stat: path=platforms/{{ platform }}
+  register: platform_exists
+- name: Write makefile
+  template:
+    src: templates/drush-install.make.j2
+    dest: "{{aegir_home}}/{{ aegir_makefile }}"
+    force: yes
+    owner: "{{ aegir_user }}"
+    group: "{{ aegir_user }}"
+- name: Create new platform
+  command: "drush make {{ aegir_makefile }} platforms/{{ platform }}"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: platform_exists.stat.exists==False
+  register: deployment
+- name: Provision-save the platform
+  command: drush --root=platforms/{{ platform }} provision-save @platform_{{ platform }} --context_type=platform --makefile={{aegir_home}}/{{ aegir_makefile }}
+  when: deployment|success
+- name: Import the platform into hostmaster
+  shell: drush @hostmaster hosting-import @platform_{{ platform }}
+  when: deployment|success
+- name: Lunch verify script
+  shell: drush @platform_{{ platform }} provision-verify
+  when: deployment|success
+  register: verification_platform

@@ -1,0 +1,15 @@
+---
+branch: 7.x-21.x
+aegir_home: "{{ ansible_env.HOME }}"
+date: "{{ ansible_date_time.epoch }}"
+aegir_user: aegir
+platform: staging-{{ branch }}-{{ date }}-mr-portal
+aegir_makefile: "{{ platform }}.make"
+tmp_path: tmp/
+drush_cache: .drush/cache/
+composer_cache: .composer/cache/
+ENV_DEV: false
+mica_version: 21.1
+agate_version: 2.3
+theme_bootstrap_version: 4.2
+js_lib_version: 2.1.3

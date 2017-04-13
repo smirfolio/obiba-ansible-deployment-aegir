@@ -1,0 +1,27 @@
+---
+- name: create directory
+  file: 
+    path: tmp 
+    state: directory 
+    owner : "{{aegir_user}}" 
+    group: "{{aegir_user}}"
+    mode: 0777
+- name: delete drush/composer folder
+  shell: "rm -rf .drush/cache/* & rm -rf .composer/cache/*"
+- name: Write makefile
+  template:
+    src: templates/drush-install.make.j2
+    dest: "tmp/{{ aegir_makefile }}"
+    force: yes
+    owner: "{{ aegir_user }}"
+    group: "{{ aegir_user }}"
+- name: Drush test deploy by make file validation 
+  command: "drush make tmp/{{ aegir_makefile }} tmp/{{ platform }}"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  register: deployment_test
+- name: delete tmp folder
+  when: deployment_test|success
+  shell: "rm -rf tmp/*"
+- include: deploy_platform.yaml
+  when: deployment_test|success
