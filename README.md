@@ -26,7 +26,7 @@ Ansible script to deploy drupal site using Aegir
 ---
 - hosts: local
   roles:
-    - ansible-deployment-aegir
+    - obiba-ansible-deployment-aegir
 ```
 - run the playbook script : 
 ```bash
