@@ -9,18 +9,28 @@
     owner: "{{ aegir_user }}"
     group: "{{ aegir_user }}"
 - name: Create new platform
-  command: "drush make {{ aegir_makefile }} platforms/{{ platform }}"
+  command: "drush make {{aegir_home}}/{{ aegir_makefile }} {{aegir_home}}/platforms/{{ platform }} --working-copy --no-gitinfofile"
+  args:
+    creates: "{{aegir_home}}/platforms/{{ platform }}"
   become: yes
   become_user: "{{ aegir_user }}"
   when: platform_exists.stat.exists==False
   register: deployment
 - name: Provision-save the platform
-  command: drush --root=platforms/{{ platform }} provision-save @platform_{{ platform }} --context_type=platform --makefile={{aegir_home}}/{{ aegir_makefile }}
+  command: drush --root={{aegir_home}}/platforms/{{ platform }} provision-save @platform_{{ platform }} --context_type=platform --makefile={{ aegir_home }}/{{ aegir_makefile }}
+  become: yes
+  become_user: "{{ aegir_user }}"
   when: deployment|success
 - name: Import the platform into hostmaster
   shell: drush @hostmaster hosting-import @platform_{{ platform }}
+  become: yes
+  become_user: "{{ aegir_user }}"
   when: deployment|success
 - name: Lunch verify script
   shell: drush @platform_{{ platform }} provision-verify
+  become: yes
+  become_user: "{{ aegir_user }}"
   when: deployment|success
   register: verification_platform
+- name: Refresh some verification_platform
+  command: "drush @hostmaster hosting-tasks --i=5 --debug"

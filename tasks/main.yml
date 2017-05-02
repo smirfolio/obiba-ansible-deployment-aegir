@@ -23,5 +23,25 @@
 - name: delete tmp folder
   when: deployment_test|success
   shell: "rm -rf tmp/*"
+- name: Get old platform
+  find:
+    paths: "{{aegir_home}}/platforms"
+    file_type: "directory"
+    patterns: "staging_7x*"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  register: old_platforms
+- name: Get the last main alias platform
+  set_fact: 
+    old_alias: "{{ old_platforms.files | sort(reverse=true, attribute='path') | map(attribute='path') |first | replace('/var/aegir/platforms/', '') }}"
+- debug: msg="{{ old_alias }}"
+- name: Set old aliases
+  set_fact: 
+    alias_old_site: "site_{{ old_alias }}"
+    alias_old_platform: "platform_{{ old_alias }}"
 - include: deploy_platform.yaml
   when: deployment_test|success
+- include: clone_site_to_new_platform.yaml
+  when: deployment_test|success
+- include: move_site_alias.yaml
+  when: new_site_enabled|success

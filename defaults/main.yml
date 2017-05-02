@@ -1,9 +1,10 @@
 ---
-branch: 7.x-21.x
+branch: 7x21x
 aegir_home: "{{ ansible_env.HOME }}"
 date: "{{ ansible_date_time.epoch }}"
 aegir_user: aegir
-platform: staging-{{ branch }}-{{ date }}-mr-portal
+alias_domain: maelstrom-site-aegir.local
+platform: staging_{{ branch }}_{{ date }}_mr_portal
 aegir_makefile: "{{ platform }}.make"
 tmp_path: tmp/
 drush_cache: .drush/cache/

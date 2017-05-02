@@ -1,0 +1,6 @@
+- include: set_alias_task.yaml site_alias={{ alias_old_site }} domain=null
+- name: Refresh some verification_platform
+  command: "drush @hostmaster hosting-tasks --i=5 --debug"
+- include: set_alias_task.yaml site_alias=site_{{ platform }} domain={{ alias_domain }}
+- name: Refresh some verification_platform
+  command: "drush @hostmaster hosting-tasks --i=5 --debug"
