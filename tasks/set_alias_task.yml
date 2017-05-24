@@ -1,0 +1,23 @@
+---
+- name: Site alias routine
+  command: "drush provision-save @{{ site_alias }} --aliases={{ domain }}"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: new_site_enabled|success
+- debug: msg="setting domain alias ====> @{{ site_alias }} | domain alias to set ===> {{ domain }}"
+- name: Set domaine Alias in Conf site
+  command: "drush @{{ site_alias }} provision-verify"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: new_site_enabled|success
+- name: Import site config to hostmaster
+  command: "drush @hostmaster hosting-import @{{ site_alias }}"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: new_site_enabled|success
+- name: Lunch Verification site to persist the new config
+  command: "drush @hostmaster hosting-task @{{ site_alias }} verify"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: new_site_enabled|success
+...

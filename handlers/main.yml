@@ -1,0 +1,2 @@
+- include: aegir_handlers.yml
+- include: server_handlers.yml

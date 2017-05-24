@@ -1,9 +1,9 @@
 ---
 - name: create directory
-  file: 
-    path: tmp 
-    state: directory 
-    owner : "{{aegir_user}}" 
+  file:
+    path: tmp
+    state: directory
+    owner : "{{aegir_user}}"
     group: "{{aegir_user}}"
     mode: 0777
 - name: delete drush/composer folder
@@ -15,7 +15,7 @@
     force: yes
     owner: "{{ aegir_user }}"
     group: "{{ aegir_user }}"
-- name: Drush test deploy by make file validation 
+- name: Drush test deploy by make file validation
   command: "drush make tmp/{{ aegir_makefile }} tmp/{{ platform }}"
   become: yes
   become_user: "{{ aegir_user }}"
@@ -32,16 +32,28 @@
   become_user: "{{ aegir_user }}"
   register: old_platforms
 - name: Get the last main alias platform
-  set_fact: 
+  set_fact:
     old_alias: "{{ old_platforms.files | sort(reverse=true, attribute='path') | map(attribute='path') |first | replace('/var/aegir/platforms/', '') }}"
+  when: old_platforms|success
+  ignore_errors: yes
 - debug: msg="{{ old_alias }}"
+  ignore_errors: yes
 - name: Set old aliases
-  set_fact: 
+  set_fact:
     alias_old_site: "site_{{ old_alias }}"
     alias_old_platform: "platform_{{ old_alias }}"
-- include: deploy_platform.yaml
+  when: old_platforms|success
+  ignore_errors: yes
+- include: deploy_platform.yml
   when: deployment_test|success
-- include: clone_site_to_new_platform.yaml
+- include: clone_site_to_new_platform.yml
   when: deployment_test|success
-- include: move_site_alias.yaml
+- include: local_setting_configuration.yml
+  when: (deployment_test|success and destination!="local")
+- include: composer_update_task.yml
   when: new_site_enabled|success
+- include: move_site_alias.yml
+  when: new_site_enabled|success
+  notify:
+   - Retart Apache
+...
