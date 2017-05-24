@@ -1,0 +1,15 @@
+---
+- name: Make sure comoser_manager module enabled 
+  command: "drush @site_{{ platform }} en -y composer_manager"
+- name: Clear cache drush 
+  command: "drush @site_{{ platform }} cc drush"
+- name: Clear cache  
+  command: "drush @site_{{ platform }} cc all"  
+- name: Rebuild composer.json dependecies
+  command: "drush @site_{{ platform }} composer-json-rebuild"
+- name: Composer install dependecies
+  composer: 
+    command: update
+    optimize_autoloader: true
+    working_dir: "{{aegir_home}}/platforms/{{ platform }}/sites/site_{{ platform }}/files/composer"
+...

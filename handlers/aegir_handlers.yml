@@ -1,0 +1,2 @@
+- name: Refresh Aegir task
+  command: "drush @hostmaster hosting-tasks --i=10 --debug"

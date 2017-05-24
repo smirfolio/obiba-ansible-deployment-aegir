@@ -1,0 +1,37 @@
+---
+- name: Check if platform already exist
+  stat: path=platforms/{{ platform }}
+  register: platform_exists
+- debug : msg="Version installation mica_client ==>{{ mica_version }} - obiba_mica==>{{ agate_version }} - js-lib==>{{ js_lib_version }} "
+- name: Write makefile
+  template:
+    src: templates/drush-install.make.j2
+    dest: "{{aegir_home}}/{{ aegir_makefile }}"
+    force: yes
+    owner: "{{ aegir_user }}"
+    group: "{{ aegir_user }}"
+- name: Create new platform
+  command: "drush make {{aegir_home}}/{{ aegir_makefile }} {{aegir_home}}/platforms/{{ platform }} --working-copy --no-gitinfofile"
+  args:
+    creates: "{{aegir_home}}/platforms/{{ platform }}"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: platform_exists.stat.exists==False
+  register: deployment
+- name: Provision-save the platform
+  command: drush --root={{aegir_home}}/platforms/{{ platform }} provision-save @platform_{{ platform }} --context_type=platform --makefile='{{ aegir_home }}/{{ aegir_makefile }}' --server='@{{ server_alias }}' --web_server='@{{ web_server_alias }}'
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: deployment|success
+- name: Import the platform into hostmaster
+  shell: drush @hostmaster hosting-import @platform_{{ platform }}
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: deployment|success
+- name: Lunch verify script
+  shell: drush @platform_{{ platform }} provision-verify
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: deployment|success
+  register: verification_platform
+...
