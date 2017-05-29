@@ -2,7 +2,7 @@
 - name: Check if platform already exist
   stat: path=platforms/{{ platform }}
   register: platform_exists
-- debug : msg="Version installation mica_client ==>{{ mica_version }} - obiba_mica==>{{ agate_version }} - js-lib==>{{ js_lib_version }} "
+- debug : msg="Version installation mica_client ==>{{ mica_version }} - obiba_agate==>{{ agate_version }} - js-lib==>{{ js_lib_version }} "
 - name: Write makefile
   template:
     src: templates/drush-install.make.j2
