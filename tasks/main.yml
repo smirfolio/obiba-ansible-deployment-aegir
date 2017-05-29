@@ -53,7 +53,7 @@
 - include: composer_update_task.yml
   when: new_site_enabled|success
 - include: move_site_alias.yml
-  when: new_site_enabled|success
+  when: (new_site_enabled|success and move_site_alias)
   notify:
    - Retart Apache
 ...
