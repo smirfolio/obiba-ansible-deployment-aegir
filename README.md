@@ -31,9 +31,18 @@ Example Playbook
         - vars/server_config.yml
         - "vars/{{ destination }}-vars.yml"
 
-Command to deploy :
+Examples of commands to deploy :
 
     ansible-playbook -i hosts -u aegir deploy.yml --flush-cache  -e "destination=staging"
+
+To deploy by clonig the live site and keep it working :
+
+    ansible-playbook -i hosts -u aegir deploy.yml --flush-cache  -e  "destination=staging alias_old_platform=<Alias of the live platform site to clone> alias_old_site=<Alias of the live site to clone> move_site_alias=false"
+
+To deply some specific obiba mica modules version using mica_version_releas, agate_version_releas variables :
+
+    ansible-playbook -i hosts -u aegir deploy.yml --flush-cache  -e  "destination=staging alias_old_platform=<Alias of the live platform site to clone> alias_old_site=<Alias of the live site to clone> mica_version_releas=21.1"
+
 
 
 License

@@ -47,22 +47,30 @@ projects[variable][version] = "2.5"
 projects[views][version] = "3.16"
 
 {% if ENV_DEV==true %}
+{% if agate_version_release is defined %}
+projects[obiba_agate] = "{{ agate_version_release }}"
+{% else %}
 projects[obiba_agate][download][type] = "git"
 projects[obiba_agate][download][branch] = "{{ agate_version }}"
 projects[obiba_agate][download][url] = "https://github.com/obiba/agate-drupal7.git"
 projects[obiba_agate][directory_name] = "obiba_agate"
 projects[obiba_agate][type] = "module"
+{% endif %}
 {% else %}
 projects[obiba_agate] = "{{ agate_version }}"
 {% endif %}
 
 
 {% if ENV_DEV==true %}
+{% if mica_version_release is defined %}
+projects[obiba_mica] = "{{ mica_version_release }}"
+{% else %}
 projects[obiba_mica][download][type] = "git"
 projects[obiba_mica][download][branch] = "{{ mica_version }}"
 projects[obiba_mica][download][url] = "https://github.com/obiba/mica-drupal7.git"
 projects[obiba_mica][directory_name] = "obiba_mica"
 projects[obiba_mica][type] = "module"
+{% endif %}
 {% else %}
 projects[obiba_mica] = "{{ mica_version }}"
 {% endif %}
@@ -70,11 +78,15 @@ projects[obiba_mica] = "{{ mica_version }}"
 ; Themes
 
 {% if ENV_DEV %}
+{% if theme_bootstrap_version_release is defined %}
+projects[obiba_bootstrap] = "{{ theme_bootstrap_version_release }}"
+{% else %}
 projects[obiba_bootstrap][download][type] = "git"
 projects[obiba_bootstrap][download][branch] = "{{ theme_bootstrap_version }}"
 projects[obiba_bootstrap][download][url] = "https://github.com/obiba/bootstrap-drupal7.git"
 projects[obiba_bootstrap][directory_name] = "obiba_bootstrap"
 projects[obiba_bootstrap][type] = "theme"
+{% endif %}
 {% else %}
 projects[obiba_bootstrap] = "{{ theme_bootstrap_version }}"
 {% endif %}
