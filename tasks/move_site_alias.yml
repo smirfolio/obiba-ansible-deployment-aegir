@@ -1,4 +1,5 @@
 ---
 - include: set_alias_task.yml site_alias={{ alias_old_site }} domain=null
+  when: move_site_alias
 - include: set_alias_task.yml site_alias=site_{{ platform }} domain={{ alias_domain }}
 ...

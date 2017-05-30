@@ -6,8 +6,7 @@
     owner : "{{aegir_user}}"
     group: "{{aegir_user}}"
     mode: 0777
-- name: delete drush/composer folder
-  shell: "rm -rf .drush/cache/* & rm -rf .composer/cache/*"
+- include:  clearch_drush_composer_cache.yml
 - name: Write makefile
   template:
     src: templates/drush-install.make.j2
@@ -53,7 +52,7 @@
 - include: composer_update_task.yml
   when: new_site_enabled|success
 - include: move_site_alias.yml
-  when: (new_site_enabled|success and move_site_alias)
+  when: new_site_enabled|success
   notify:
    - Retart Apache
 ...

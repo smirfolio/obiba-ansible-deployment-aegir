@@ -1,0 +1,25 @@
+---
+- name : collect drush cache files to delete
+  find:
+    paths: ".drush/cache/"
+    hidden: True
+    file_type: any
+  register: drush_cache_files
+- name : collect composer cache files to delete
+  find:
+    paths: ".composer/cache/"
+    hidden: True
+    file_type: any
+  register: composer_cache_files
+- name: remove collected cahce files and directories
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  become: yes
+  become_user: "{{ aegir_user }}"
+  with_items: >
+      {{
+        drush_cache_files.files
+        + composer_cache_files.files
+      }}
+...
