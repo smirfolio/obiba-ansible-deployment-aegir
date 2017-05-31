@@ -1,4 +1,7 @@
 ---
+- name: Default templates folder
+  set_fact:
+    default_template: "{{ override_template | default('templates/')}}"
 - name: create directory
   file:
     path: tmp
@@ -9,7 +12,7 @@
 - include:  clearch_drush_composer_cache.yml
 - name: Write makefile
   template:
-    src: templates/drush-install.make.j2
+    src: "{{ default_template }}drush-install.make.j2"
     dest: "tmp/{{ aegir_makefile }}"
     force: yes
     owner: "{{ aegir_user }}"
@@ -26,7 +29,7 @@
   find:
     paths: "{{aegir_home}}/platforms"
     file_type: "directory"
-    patterns: "staging_7x*"
+    patterns: "{{ destination }}_7x*"
   become: yes
   become_user: "{{ aegir_user }}"
   register: old_platforms
