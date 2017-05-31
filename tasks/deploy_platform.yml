@@ -5,7 +5,7 @@
 - debug : msg="Version installation mica_client ==>{{ mica_version_release | default(mica_version) }} - obiba_agate==>{{ agate_version_release | default(agate_version) }} - js-lib==>{{ js_lib_version }} "
 - name: Write makefile
   template:
-    src: templates/drush-install.make.j2
+    src: "{{ default_template }}drush-install.make.j2"
     dest: "{{aegir_home}}/{{ aegir_makefile }}"
     force: yes
     owner: "{{ aegir_user }}"

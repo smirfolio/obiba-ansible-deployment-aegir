@@ -1,6 +1,6 @@
 - name: Write local-settings file
   template:
-    src: templates/local.sttings.php.j2
+    src: "{{ default_template }}local.sttings.php.j2"
     dest: "{{aegir_home}}/platforms/{{ platform }}/sites/site_{{ platform }}/local.settings.php"
     force: yes
     owner: "{{ aegir_user }}"
