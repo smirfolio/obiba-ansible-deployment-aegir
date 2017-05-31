@@ -6,6 +6,7 @@ It deploy Drupal site and perform some composer command to update some composer 
 Role Variables
 --------------
 We need a
+
 - vars/{{ destination}}-vars.yml to define these variables :
 
       branch: <Used obiba_mica branch version (exp : 7x21x)>
@@ -18,18 +19,21 @@ We need a
       server_alias: <The serve alias defined in Aegir>
       web_server_alias: <The web serve alias defined in Aegir>
 - vars/server_config.yml to define host name server behind proxy
+
       SERVER_deployement_staging: <Server staging host name>
       SERVER_deployement_production: l<Server live host name>
+
+- Optional : templates/drush-install.make.j2 , templates/local.sttings.php.j2 to override default module to install and a default local.settings.php for sub sites
 
 Example Playbook
 ----------------
 
-    - hosts: "{{ destination }}"
-      roles:
-        - obiba.obiba-ansible-deployment-aegir
-      vars_files:
-        - vars/server_config.yml
-        - "vars/{{ destination }}-vars.yml"
+      - hosts: "{{ destination }}"
+        roles:
+          - obiba.obiba-ansible-deployment-aegir
+        vars_files:
+          - vars/server_config.yml
+          - "vars/{{ destination }}-vars.yml"
 
 Examples of commands to deploy :
 
@@ -42,8 +46,6 @@ To deploy by clonig the live site and keep it working :
 To deply some specific obiba mica modules version using mica_version_releas, agate_version_releas variables :
 
     ansible-playbook -i hosts -u aegir deploy.yml --flush-cache  -e  "destination=staging alias_old_platform=<Alias of the live platform site to clone> alias_old_site=<Alias of the live site to clone> mica_version_releas=21.1"
-
-
 
 License
 -------
