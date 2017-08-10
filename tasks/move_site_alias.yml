@@ -1,5 +1,8 @@
 ---
+- set_fact:
+    number_site: "{{ item.number }}"
+    alias_domain: "{{ item.alias_domain }}"
 - include: set_alias_task.yml site_alias={{ alias_old_site }} domain=null
   when: move_site_alias
-- include: set_alias_task.yml site_alias=site_{{ platform }} domain={{ alias_domain }}
+- include: set_alias_task.yml site_alias=site{{ number_site }}_{{ platform }} domain={{ alias_domain }}
 ...

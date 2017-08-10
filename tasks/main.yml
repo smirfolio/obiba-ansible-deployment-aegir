@@ -49,12 +49,20 @@
 - include: deploy_platform.yml
   when: deployment_test|success
 - include: clone_site_to_new_platform.yml
-  when: deployment_test|success
+  with_items:
+     - "{{ sites_to_clones }}"
+  when: (deployment_test|success)
 - include: local_setting_configuration.yml
+  with_items:
+     - "{{ sites_to_clones }}"
   when: (deployment_test|success and destination!="local")
 - include: composer_update_task.yml
+  with_items:
+     - "{{ sites_to_clones }}"
   when: new_site_enabled|success
 - include: move_site_alias.yml
+  with_items:
+     - "{{ sites_to_clones }}"
   when: new_site_enabled|success
   notify:
    - Retart Apache
