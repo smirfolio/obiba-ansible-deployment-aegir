@@ -1,15 +1,17 @@
 ---
+- set_fact:
+    number_site: "{{ item.number }}"
 - name: Make sure comoser_manager module enabled 
-  command: "drush @site_{{ platform }} en -y composer_manager"
+  command: "drush @site{{ number_site }}_{{ platform }} en -y composer_manager"
 - name: Clear cache drush 
-  command: "drush @site_{{ platform }} cc drush"
+  command: "drush @site{{ number_site }}_{{ platform }} cc drush"
 - name: Clear cache  
-  command: "drush @site_{{ platform }} cc all"  
+  command: "drush @site{{ number_site }}_{{ platform }} cc all"
 - name: Rebuild composer.json dependecies
-  command: "drush @site_{{ platform }} composer-json-rebuild"
+  command: "drush @site{{ number_site }}_{{ platform }} composer-json-rebuild"
 - name: Composer install dependecies
   composer: 
     command: update
     optimize_autoloader: true
-    working_dir: "{{aegir_home}}/platforms/{{ platform }}/sites/site_{{ platform }}/files/composer"
+    working_dir: "{{aegir_home}}/platforms/{{ platform }}/sites/site{{ number_site }}_{{ platform }}/files/composer"
 ...
