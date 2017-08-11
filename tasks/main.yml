@@ -42,7 +42,7 @@
   ignore_errors: yes
 - name: Set old aliases
   set_fact:
-    alias_old_site: "site_{{ old_alias }}"
+    alias_old_site: "{{ old_alias }}"
     alias_old_platform: "platform_{{ old_alias }}"
   when: old_platforms|success
   ignore_errors: yes

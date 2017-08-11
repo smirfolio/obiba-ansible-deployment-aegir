@@ -1,0 +1,8 @@
+---
+- name: Test if site {{ test_site }} exist
+  command: "drush @{{test_site}} cc all"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  register: site_exist
+  ignore_errors: yes
+...

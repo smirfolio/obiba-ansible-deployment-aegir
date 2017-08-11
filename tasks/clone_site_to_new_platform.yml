@@ -3,13 +3,20 @@
 - debug: msg="{{ item }}"
 - set_fact:
     number_site: "{{ item.number }}"
-- name: Clone old site to the new platform
-  command: "drush @{{ alias_old_site }} provision-clone @site{{number_site}}_{{ platform }} @platform_{{ platform }}"
+- include: test_site_exist.yml test_site=site{{ number_site }}_{{ alias_old_site }}
+- name: Clone old sites to the new platform
+  command: "drush @site{{ number_site }}_{{ alias_old_site }} provision-clone @site{{number_site}}_{{ platform }} @platform_{{ platform }}"
   become: yes
   become_user: "{{ aegir_user }}"
-  when: verification_platform|success
+  when: verification_platform|success and site_exist|success and clone_from_one==false
   register: cloned_site
-- debug: msg="Site @{{ alias_old_site }} cloned to    ====> @platform_{{ platform }}"
+- name: Clone old site to the new platform
+  command: "drush @site_{{ alias_old_site }} provision-clone @site{{number_site}}_{{ platform }} @platform_{{ platform }}"
+  become: yes
+  become_user: "{{ aegir_user }}"
+  when: verification_platform|success and clone_from_one==true
+  register: cloned_site
+- debug: msg="Site @site_{{ alias_old_site }} cloned to    ====> @platform_{{ platform }}"
 - name: Import the new cloned site to hostmaster
   command: "drush @hostmaster hosting-task @platform_{{ platform }} verify"
   become: yes
