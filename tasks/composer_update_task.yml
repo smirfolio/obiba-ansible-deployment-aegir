@@ -1,15 +1,15 @@
 ---
 - set_fact:
     number_site: "{{ item.number }}"
-- name: Make sure comoser_manager module enabled 
+- name: Make sure comoser_manager module enabled  at @site{{ number_site }}_{{ platform }}
   command: "drush @site{{ number_site }}_{{ platform }} en -y composer_manager"
-- name: Clear cache drush 
+- name: Clear cache drush at @site{{ number_site }}_{{ platform }}
   command: "drush @site{{ number_site }}_{{ platform }} cc drush"
-- name: Clear cache  
+- name: Clear cache at @site{{ number_site }}_{{ platform }}
   command: "drush @site{{ number_site }}_{{ platform }} cc all"
-- name: Rebuild composer.json dependecies
+- name: Rebuild composer.json dependecies at @site{{ number_site }}_{{ platform }}
   command: "drush @site{{ number_site }}_{{ platform }} composer-json-rebuild"
-- name: Composer install dependecies
+- name: Composer install dependecies at @site{{ number_site }}_{{ platform }}
   composer: 
     command: update
     optimize_autoloader: true
