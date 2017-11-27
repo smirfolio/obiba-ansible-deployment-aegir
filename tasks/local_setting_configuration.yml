@@ -6,11 +6,11 @@
 - name: Write local-settings file
   template:
     src: "{{ default_template }}local.sttings.php.j2"
-    dest: "{{aegir_home}}/platforms/{{ platform }}/sites/site{{ number_site }}_{{ platform }}/local.settings.php"
+    dest: "{{aegir_home}}/platforms/{{ platform }}/sites/site{{ number_site }}-{{ platform }}/local.settings.php"
     force: yes
     owner: "{{ aegir_user }}"
     group: "{{ aegir_user }}"
 - name: Set to default theme
-  command: "drush @site{{ number_site }}_{{ platform }} vset -y --format=string theme_default {{ default_theme }}"
+  command: "drush @site{{ number_site }}-{{ platform }} vset -y --format=string theme_default {{ default_theme }}"
   when: default_theme!=""
 ...

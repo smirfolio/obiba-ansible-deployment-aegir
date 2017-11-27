@@ -1,17 +1,17 @@
 ---
 - set_fact:
     number_site: "{{ item.number }}"
-- name: Make sure comoser_manager module enabled  at @site{{ number_site }}_{{ platform }}
-  command: "drush @site{{ number_site }}_{{ platform }} en -y composer_manager"
-- name: Clear cache drush at @site{{ number_site }}_{{ platform }}
-  command: "drush @site{{ number_site }}_{{ platform }} cc drush"
-- name: Clear cache at @site{{ number_site }}_{{ platform }}
-  command: "drush @site{{ number_site }}_{{ platform }} cc all"
-- name: Rebuild composer.json dependecies at @site{{ number_site }}_{{ platform }}
-  command: "drush @site{{ number_site }}_{{ platform }} composer-json-rebuild"
-- name: Composer install dependecies at @site{{ number_site }}_{{ platform }}
+- name: Make sure comoser_manager module enabled  at @site{{ number_site }}-{{ platform }}
+  command: "drush @site{{ number_site }}-{{ platform }} en -y composer_manager"
+- name: Clear cache drush at @site{{ number_site }}-{{ platform }}
+  command: "drush @site{{ number_site }}-{{ platform }} cc drush"
+- name: Clear cache at @site{{ number_site }}-{{ platform }}
+  command: "drush @site{{ number_site }}-{{ platform }} cc all"
+- name: Rebuild composer.json dependecies at @site{{ number_site }}-{{ platform }}
+  command: "drush @site{{ number_site }}-{{ platform }} composer-json-rebuild"
+- name: Composer install dependecies at @site{{ number_site }}-{{ platform }}
   composer: 
     command: update
     optimize_autoloader: true
-    working_dir: "{{aegir_home}}/platforms/{{ platform }}/sites/site{{ number_site }}_{{ platform }}/files/composer"
+    working_dir: "{{aegir_home}}/platforms/{{ platform }}/sites/site{{ number_site }}-{{ platform }}/files/composer"
 ...

@@ -42,8 +42,8 @@
   ignore_errors: yes
 - name: Set old aliases
   set_fact:
-    alias_old_site: "{{ old_alias }}"
-    alias_old_platform: "platform_{{ old_alias }}"
+    alias_old_site: "site-{{ old_alias }}"
+    alias_old_platform: "platform-{{ old_alias }}"
   when: old_platforms|success
   ignore_errors: yes
 - include: deploy_platform.yml
@@ -55,7 +55,7 @@
 - include: local_setting_configuration.yml
   with_items:
      - "{{ sites_to_clones }}"
-  when: (deployment_test|success and destination!="local")
+  when: (deployment_test|success")
 - include: composer_update_task.yml
   with_items:
      - "{{ sites_to_clones }}"

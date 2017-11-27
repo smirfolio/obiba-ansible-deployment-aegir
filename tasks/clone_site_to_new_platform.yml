@@ -3,20 +3,14 @@
 - debug: msg="{{ item }}"
 - set_fact:
     number_site: "{{ item.number }}"
-- include: test_site_exist.yml test_site=site{{ number_site }}_{{ alias_old_site }}
+- include: test_site_exist.yml test_site={{ alias_old_site }}
 - name: Clone old sites to the new platform
-  command: "drush @site{{ number_site }}_{{ alias_old_site }} provision-clone @site{{number_site}}_{{ platform }} @platform_{{ platform }}"
+  command: "drush @{{ alias_old_site }} provision-clone @site{{number_site}}-{{ platform }} @platform_{{ platform }}"
   become: yes
   become_user: "{{ aegir_user }}"
-  when: verification_platform|success and site_exist|success and clone_from_one==false
+  when: verification_platform|success and site_exist|success
   register: cloned_site
-- name: Clone old site to the new platform
-  command: "drush @site_{{ alias_old_site }} provision-clone @site{{number_site}}_{{ platform }} @platform_{{ platform }}"
-  become: yes
-  become_user: "{{ aegir_user }}"
-  when: verification_platform|success and clone_from_one==true
-  register: cloned_site
-- debug: msg="Site @site_{{ alias_old_site }} cloned to    ====> @platform_{{ platform }}"
+- debug: msg="Site @{{ alias_old_site }} cloned to    ====> @platform_{{ platform }}"
 - name: Import the new cloned site to hostmaster
   command: "drush @hostmaster hosting-task @platform_{{ platform }} verify"
   become: yes
@@ -24,11 +18,11 @@
   when: cloned_site|success
 - debug: msg="Site imported to hostmaster    ====> @platform_{{ platform }}"
 - name: Enable the new site 
-  command: "drush @hostmaster hosting-task @site{{number_site}}_{{ platform }} enable"
+  command: "drush @hostmaster hosting-task @site{{number_site}}-{{ platform }} enable"
   become: yes
   become_user: "{{ aegir_user }}"
   when: cloned_site|success
   register: new_site_enabled
-- debug: msg="Site enabled    ====> @site{{number_site}}_{{ platform }}"
+- debug: msg="Site enabled    ====> @site{{number_site}}-{{ platform }}"
   when: new_site_enabled|success
 ...
